@@ -39,21 +39,24 @@ with open("embeddings.pkl", "rb") as f:
 
 
 # LOAD MODEL
-model = SentenceTransformer(
-    "all-MiniLM-L6-v2"
-)
-
+model = None
 
 @app.get("/")
 def home():
 
     return {
-        "message": "NovelVerse AI Running"
+        "message": "NovelCompass AI Running"
     }
 
 
 @app.get("/recommend")
 def recommend(user_query: str):
+    global model
+
+    if model is None:
+        model = SentenceTransformer(
+            "all-MiniLM-L6-v2"
+        )
 
     query_embedding = model.encode([user_query])
 
