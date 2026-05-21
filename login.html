@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>NovelVerse Login</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;700&family=Manrope:wght@300;400;500;600&display=swap"
+          rel="stylesheet">
+
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+        }
+
+        body{
+
+            height:100vh;
+
+            overflow:hidden;
+
+            font-family:'Manrope',sans-serif;
+
+            display:flex;
+
+            justify-content:center;
+
+            align-items:center;
+
+            background:#0b0b16;
+        }
+
+        .bg{
+
+            position:absolute;
+
+            inset:0;
+
+            width:100%;
+
+            height:100%;
+
+            object-fit:cover;
+
+            z-index:1;
+        }
+
+        .overlay{
+
+            position:absolute;
+
+            inset:0;
+
+            background:rgba(5,5,20,0.55);
+
+            z-index:2;
+        }
+
+        .login-box{
+
+            position:relative;
+
+            z-index:3;
+
+            width:420px;
+
+            padding:40px;
+
+            border-radius:28px;
+
+            background:rgba(255,255,255,0.08);
+
+            backdrop-filter:blur(18px);
+
+            border:1px solid rgba(255,255,255,0.12);
+
+            box-shadow:0 10px 40px rgba(0,0,0,0.35);
+
+            text-align:center;
+        }
+
+        .title{
+
+            font-size:52px;
+
+            font-family:'Cormorant Garamond',serif;
+
+            margin-bottom:10px;
+
+            color:white;
+        }
+
+        .subtitle{
+
+            color:#ddd;
+
+            margin-bottom:30px;
+
+            font-size:15px;
+        }
+
+        input{
+
+            width:100%;
+
+            padding:16px;
+
+            margin-bottom:18px;
+
+            border:none;
+
+            border-radius:16px;
+
+            background:rgba(255,255,255,0.12);
+
+            color:white;
+
+            outline:none;
+
+            font-size:15px;
+        }
+
+        input::placeholder{
+
+            color:#ddd;
+        }
+
+        button{
+
+            width:100%;
+
+            padding:16px;
+
+            border:none;
+
+            border-radius:16px;
+
+            background:linear-gradient(
+                135deg,
+                #7d4cff,
+                #ba71ff
+            );
+
+            color:white;
+
+            font-size:16px;
+
+            font-weight:600;
+
+            cursor:pointer;
+
+            margin-bottom:12px;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<img
+    src="new.png"
+    class="bg"
+>
+
+<div class="overlay"></div>
+
+<div class="login-box">
+
+    <div class="title">
+        NovelVerse AI
+    </div>
+
+    <div class="subtitle">
+        Login to continue
+    </div>
+
+    <input
+        type="email"
+        id="email"
+        placeholder="Email Address"
+    >
+
+    <input
+        type="password"
+        id="password"
+        placeholder="Password"
+    >
+
+    <button onclick="signUp()">
+        Sign Up
+    </button>
+
+    <button onclick="loginUser()">
+        Login
+    </button>
+
+</div>
+
+<script type="module">
+
+import { initializeApp }
+
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+
+    getAuth,
+
+    createUserWithEmailAndPassword,
+
+    signInWithEmailAndPassword,
+
+    onAuthStateChanged
+
+}
+
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+
+
+const firebaseConfig = {
+
+  apiKey: "AIzaSyAtqSeajoVQDQDbTQz1sEVgyJu3MvnfkgQ",
+
+  authDomain: "novelverse-ai-c2801.firebaseapp.com",
+
+  projectId: "novelverse-ai-c2801",
+
+  storageBucket: "novelverse-ai-c2801.firebasestorage.app",
+
+  messagingSenderId: "92469483883",
+
+  appId: "1:92469483883:web:7e38d230296c860d69942e",
+
+  measurementId: "G-RZDW2VL3KN"
+};
+
+
+
+const app = initializeApp(firebaseConfig);
+
+const auth = getAuth(app);
+
+
+
+onAuthStateChanged(auth, (user) => {
+
+    if(user){
+
+        window.location.href =
+        "index.html";
+    }
+});
+
+
+
+window.signUp = function(){
+
+    const email =
+    document.getElementById("email").value;
+
+    const password =
+    document.getElementById("password").value;
+
+
+
+    createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+    )
+
+    .then(() => {
+
+        alert("Account created!");
+
+        window.location.href =
+        "index.html";
+    })
+
+    .catch((error) => {
+
+        alert(error.message);
+    });
+};
+
+
+
+window.loginUser = function(){
+
+    const email =
+    document.getElementById("email").value;
+
+    const password =
+    document.getElementById("password").value;
+
+
+
+    signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+    )
+
+    .then(() => {
+
+        alert("Login successful!");
+
+        window.location.href =
+        "index.html";
+    })
+
+    .catch((error) => {
+
+        alert(error.message);
+    });
+};
+
+</script>
+
+</body>
+</html>

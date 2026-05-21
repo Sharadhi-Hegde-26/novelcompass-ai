@@ -1,0 +1,983 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>NovelCompass AI</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@300;400;500;600&display=swap"
+          rel="stylesheet">
+
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+        }
+
+        body{
+
+            font-family:'Manrope',sans-serif;
+
+            background:#0b0b16;
+
+            color:white;
+
+            min-height:100vh;
+
+            padding:18px;
+        }
+
+        .container{
+
+            width:100%;
+            margin:auto;
+        }
+
+        .hero{
+
+            position:relative;
+
+            height:500px;
+
+            border-radius:32px;
+
+            overflow:hidden;
+
+            margin-bottom:35px;
+
+            box-shadow:0 15px 40px rgba(0,0,0,0.35);
+        }
+
+        .hero-bg{
+
+            position:absolute;
+
+            inset:0;
+
+            width:100%;
+
+            height:100%;
+
+            object-fit:cover;
+        }
+
+        .hero-overlay{
+
+            position:absolute;
+
+            inset:0;
+
+            background:linear-gradient(
+                rgba(5,5,20,0.18),
+                rgba(5,5,20,0.45)
+            );
+
+            z-index:1;
+        }
+
+        .navbar{
+
+            position:absolute;
+
+            top:24px;
+            left:32px;
+            right:32px;
+
+            display:flex;
+
+            justify-content:space-between;
+
+            align-items:center;
+
+            z-index:5;
+        }
+
+        .logo{
+
+            font-size:42px;
+
+            font-family:'Cormorant Garamond',serif;
+
+            color:white;
+
+            font-weight:700;
+        }
+
+        .nav-links{
+
+            display:flex;
+
+            gap:28px;
+        }
+
+        .nav-links a{
+
+            color:white;
+
+            text-decoration:none;
+
+            font-size:16px;
+
+            font-weight:500;
+        }
+
+        .hero-content{
+
+            position:absolute;
+
+            top:50%;
+
+            left:50%;
+
+            transform:translate(-50%,-50%);
+
+            text-align:center;
+
+            width:100%;
+
+            z-index:4;
+        }
+
+        .hero-tagline{
+
+            font-size:28px;
+
+            font-family:'Cormorant Garamond',serif;
+
+            font-weight:700;
+        }
+
+        .cards{
+
+            display:grid;
+
+            grid-template-columns:1fr 1fr;
+
+            gap:24px;
+        }
+
+        .card{
+
+            position:relative;
+
+            border-radius:28px;
+
+            overflow:hidden;
+
+            min-height:520px;
+
+            background:rgba(255,255,255,0.04);
+
+            border:1px solid rgba(255,255,255,0.06);
+        }
+
+        .card img.bg{
+
+            width:100%;
+
+            height:100%;
+
+            object-fit:cover;
+
+            position:absolute;
+
+            inset:0;
+
+            z-index:1;
+        }
+
+        .overlay{
+
+            position:absolute;
+
+            inset:0;
+
+            background:linear-gradient(
+                rgba(5,5,20,0.12),
+                rgba(5,5,20,0.65)
+            );
+
+            z-index:2;
+        }
+
+        .card-content{
+
+            position:relative;
+
+            z-index:3;
+
+            padding:28px;
+        }
+
+        .card-content h2{
+
+            font-size:34px;
+
+            font-family:'Cormorant Garamond',serif;
+
+            margin-bottom:12px;
+        }
+
+        .search-box{
+
+            display:flex;
+
+            gap:12px;
+
+            margin-bottom:20px;
+        }
+
+        input{
+
+            flex:1;
+
+            padding:16px;
+
+            border:none;
+
+            border-radius:16px;
+
+            background:rgba(255,255,255,0.15);
+
+            color:white;
+
+            outline:none;
+        }
+
+        input::placeholder{
+
+            color:#ddd;
+        }
+
+        button{
+
+            padding:14px 20px;
+
+            border:none;
+
+            border-radius:16px;
+
+            background:linear-gradient(
+                135deg,
+                #7d4cff,
+                #ba71ff
+            );
+
+            color:white;
+
+            cursor:pointer;
+
+            margin-top:10px;
+
+            margin-right:10px;
+        }
+
+        .book-card{
+
+            background:rgba(255,255,255,0.14);
+
+            padding:18px;
+
+            border-radius:20px;
+
+            margin-bottom:16px;
+
+            border-left:4px solid #ba71ff;
+        }
+
+        .book-layout{
+
+            display:flex;
+
+            justify-content:space-between;
+
+            align-items:center;
+
+            gap:20px;
+        }
+
+        .book-info{
+
+            flex:1;
+        }
+
+        .book-title{
+
+            font-size:20px;
+
+            font-weight:700;
+
+            margin-bottom:12px;
+        }
+
+        .score{
+
+            margin-bottom:8px;
+
+            line-height:1.5;
+        }
+
+        .book-cover{
+
+            width:110px;
+
+            height:160px;
+
+            object-fit:cover;
+
+            border-radius:16px;
+        }
+
+        .details{
+
+            display:none;
+
+            margin-top:16px;
+        }
+
+        .recommendation-banner{
+
+            background:linear-gradient(
+                135deg,
+                #7d4cff,
+                #ba71ff
+            );
+
+            padding:18px;
+
+            border-radius:20px;
+
+            margin-bottom:20px;
+
+            text-align:center;
+
+            font-size:24px;
+
+            font-weight:700;
+        }
+
+        #recommendationSection{
+
+            margin-top:50px;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="hero">
+
+        <img src="new.png" class="hero-bg">
+
+        <div class="hero-overlay"></div>
+
+        <div class="navbar">
+
+            <div class="logo">
+                NovelCompass AI
+            </div>
+
+            <div class="nav-links">
+
+                <a href="#">
+                    Home
+                </a>
+
+                <a href="#">
+                    About Us
+                </a>
+
+                <a href="login.html">
+                    Login
+                </a>
+
+            </div>
+
+        </div>
+
+        <div class="hero-content">
+
+            <p class="hero-tagline">
+                Navigate Your Next Great Read.
+            </p>
+
+        </div>
+
+    </div>
+
+    <div class="cards">
+
+        <div class="card">
+
+            <img src="girl_sitting.png" class="bg">
+
+            <div class="overlay"></div>
+
+            <div class="card-content">
+
+                <h2>Memory Trace</h2>
+
+                <div class="search-box">
+
+                    <input
+                        type="text"
+                        id="query"
+                        placeholder="magic school..."
+                    >
+
+                    <button onclick="searchBooks()">
+                        Search
+                    </button>
+
+                    <button onclick="startVoiceSearch('query')">
+                        🎤
+                    </button>
+
+                </div>
+
+                <div id="results"></div>
+
+            </div>
+
+        </div>
+
+        <div class="card">
+
+            <img src="chair_image.png" class="bg">
+
+            <div class="overlay"></div>
+
+            <div class="card-content">
+
+                <h2>VibeMatch</h2>
+
+                <div class="search-box">
+
+                    <input
+                        type="text"
+                        id="genreQuery"
+                        placeholder="fantasy, romance..."
+                    >
+
+                    <button onclick="genreSearch()">
+                        Discover
+                    </button>
+
+                    <button onclick="startVoiceSearch('genreQuery')">
+                        🎤
+                    </button>
+
+                </div>
+
+                <div id="genreResults"></div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div id="recommendationSection"></div>
+
+</div>
+
+<script>
+
+function startVoiceSearch(inputId){
+
+    const SpeechRecognition =
+
+        window.SpeechRecognition ||
+
+        window.webkitSpeechRecognition;
+
+
+
+    if(!SpeechRecognition){
+
+        alert(
+            "Voice recognition not supported in this browser."
+        );
+
+        return;
+    }
+
+
+
+    const recognition =
+
+        new SpeechRecognition();
+
+
+
+    recognition.lang = "en-US";
+
+    recognition.interimResults = false;
+
+    recognition.maxAlternatives = 1;
+
+
+
+    recognition.start();
+
+
+
+    recognition.onresult = function(event){
+
+        const transcript =
+
+            event.results[0][0].transcript;
+
+
+
+        document.getElementById(
+            inputId
+        ).value = transcript;
+
+
+
+        if(inputId === "query"){
+
+            searchBooks();
+        }
+
+        else{
+
+            genreSearch();
+        }
+    };
+
+
+
+    recognition.onerror = function(event){
+
+        alert(
+            "Voice recognition error: " +
+            event.error
+        );
+    };
+}
+
+
+let userSearchHistory = JSON.parse(
+
+    localStorage.getItem(
+        "novelverseSearches"
+    )
+
+) || [];
+
+
+
+window.onload = function(){
+
+    if(userSearchHistory.length > 0){
+
+        showRecommendations();
+    }
+};
+
+
+
+function createBookCard(
+
+    book,
+
+    index,
+
+    sectionName
+
+){
+
+    const safeDescription =
+
+        book.description
+        .replace(/'/g, "")
+        .replace(/"/g, "");
+
+
+
+    return `
+
+    <div class="book-card">
+
+        <div class="book-layout">
+
+            <div class="book-info">
+
+                <div class="book-title">
+                    ✨ ${book.title}
+                </div>
+
+                <div class="score">
+                    👤 Author:
+                    ${book.author}
+                </div>
+
+                <div class="score">
+                    📖 Pages:
+                    ${book.pages}
+                </div>
+
+                <div class="score">
+                    ⭐ Rating:
+                    ${book.rating}
+                </div>
+
+                <div class="score">
+                    🔥 ${book.score}% Match
+                </div>
+
+                <button
+                    onclick="toggleDetails(
+                        '${sectionName}-${index}'
+                    )">
+
+                    View Details
+
+                </button>
+
+                <button
+                    onclick="speakBook(
+
+                        '${book.title}',
+
+                        '${book.author}',
+
+                        '${safeDescription}',
+
+                        '${book.rating}'
+
+                    )">
+
+                    🔊 Listen
+
+                </button>
+
+                <button
+                    onclick="stopVoice()">
+
+                    ⏹ Stop
+
+                </button>
+
+                <div
+                    class="details"
+                    id="${sectionName}-${index}">
+
+                    <div
+                        class="score"
+                        style="
+                            margin-top:14px;
+                            line-height:1.7;
+                        ">
+
+                        ${book.description}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <img
+                src="${book.cover}"
+                class="book-cover"
+            >
+
+        </div>
+
+    </div>
+
+    `;
+}
+
+
+
+async function showRecommendations(){
+
+    if(userSearchHistory.length < 1){
+
+        return;
+    }
+
+    const recommendationDiv =
+
+        document.getElementById(
+            "recommendationSection"
+        );
+
+    recommendationDiv.innerHTML =
+
+        "<p>Loading recommendations...</p>";
+
+    const combinedSearch =
+
+        userSearchHistory.join(" ");
+
+    try{
+
+        const response = await fetch(
+
+            `http://127.0.0.1:8000/recommend?user_query=${combinedSearch}`
+
+        );
+
+        const data = await response.json();
+
+        recommendationDiv.innerHTML =
+
+        `
+
+        <div class="recommendation-banner">
+
+            🔮 Recommended For You
+
+        </div>
+
+        `;
+
+        data.forEach((book, index) => {
+
+            recommendationDiv.innerHTML +=
+
+                createBookCard(
+
+                    book,
+
+                    index,
+
+                    "recommend"
+
+                );
+        });
+
+    }
+
+    catch(error){
+
+        console.log(error);
+    }
+}
+
+
+
+async function fetchBooks(
+
+    query,
+
+    resultsDiv,
+
+    sectionName
+
+){
+
+    resultsDiv.innerHTML =
+
+        "<p>Loading...</p>";
+
+    try{
+
+        const response = await fetch(
+
+            `http://127.0.0.1:8000/recommend?user_query=${query}`
+
+        );
+
+        const data = await response.json();
+
+        resultsDiv.innerHTML = "";
+
+        userSearchHistory.push(query);
+
+        localStorage.setItem(
+
+            "novelverseSearches",
+
+            JSON.stringify(
+                userSearchHistory
+            )
+        );
+
+        data.forEach((book, index) => {
+
+            resultsDiv.innerHTML +=
+
+                createBookCard(
+
+                    book,
+
+                    index,
+
+                    sectionName
+
+                );
+        });
+
+        showRecommendations();
+
+    }
+
+    catch(error){
+
+        resultsDiv.innerHTML =
+
+        "<p style='color:red;'>Error loading recommendations.</p>";
+
+        console.log(error);
+    }
+}
+
+
+
+async function searchBooks(){
+
+    const query =
+
+        document.getElementById(
+            "query"
+        ).value;
+
+    const resultsDiv =
+
+        document.getElementById(
+            "results"
+        );
+
+    fetchBooks(
+
+        query,
+
+        resultsDiv,
+
+        "memory"
+
+    );
+}
+
+
+
+async function genreSearch(){
+
+    const query =
+
+        document.getElementById(
+            "genreQuery"
+        ).value;
+
+    const resultsDiv =
+
+        document.getElementById(
+            "genreResults"
+        );
+
+    fetchBooks(
+
+        query,
+
+        resultsDiv,
+
+        "genre"
+
+    );
+}
+
+
+
+function toggleDetails(id){
+
+    const details =
+
+        document.getElementById(id);
+
+    if(details.style.display === "block"){
+
+        details.style.display = "none";
+    }
+
+    else{
+
+        details.style.display = "block";
+    }
+}
+
+
+
+function speakBook(
+
+    title,
+
+    author,
+
+    description,
+
+    rating
+
+){
+
+    window.speechSynthesis.cancel();
+
+    const speechText =
+
+        `
+
+        Book title is ${title}.
+
+        Written by ${author}.
+
+        Rating is ${rating} stars.
+
+        Description.
+
+        ${description}
+
+        `;
+
+    const speech =
+
+        new SpeechSynthesisUtterance(
+            speechText
+        );
+
+    speech.rate = 0.95;
+
+    speech.pitch = 1;
+
+    speech.volume = 1;
+
+    const voices =
+
+        window.speechSynthesis.getVoices();
+
+    if(voices.length > 0){
+
+        speech.voice = voices[1];
+    }
+
+    window.speechSynthesis.speak(
+        speech
+    );
+}
+
+
+
+function stopVoice(){
+
+    window.speechSynthesis.cancel();
+}
+
+</script>
+
+</body>
+</html>
