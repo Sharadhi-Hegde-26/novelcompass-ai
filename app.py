@@ -51,11 +51,13 @@ def home():
 
 @app.get("/recommend")
 def recommend(user_query: str):
+
     global model
 
     if model is None:
         model = SentenceTransformer(
-            "all-MiniLM-L6-v2"
+            "all-MiniLM-L6-v2",
+             device = "cpu"
         )
 
     query_embedding = model.encode([user_query])
