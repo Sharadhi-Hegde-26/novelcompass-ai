@@ -4,15 +4,12 @@ os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from sentence_transformers import SentenceTransformer
 from sklearn.metrics.pairwise import cosine_similarity
 
 import pandas as pd
 import pickle
 
-
 app = FastAPI()
-
 
 app.add_middleware(
     CORSMiddleware,
@@ -22,7 +19,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
 # LOAD DATASET
 books = pd.read_csv(
     "new_dataset.csv",
@@ -31,21 +27,25 @@ books = pd.read_csv(
 
 books = books.head(1000)
 
-
 # LOAD EMBEDDINGS
 with open("embeddings.pkl", "rb") as f:
-
     book_embeddings = pickle.load(f)
 
-
-# LOAD MODEL
+# MODEL WILL LOAD ONLY WHEN NEEDED
 model = None
+
 
 @app.get("/")
 def home():
-
     return {
         "message": "NovelCompass AI Running"
+    }
+
+
+@app.get("/health")
+def health():
+    return {
+        "status": "ok"
     }
 
 
@@ -54,10 +54,13 @@ def recommend(user_query: str):
 
     global model
 
+    # Import only when endpoint is called
     if model is None:
+        from sentence_transformers import SentenceTransformer
+
         model = SentenceTransformer(
             "all-MiniLM-L6-v2",
-             device = "cpu"
+            device="cpu"
         )
 
     query_embedding = model.encode([user_query])
